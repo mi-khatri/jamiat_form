@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jamiat Form</title>
+    <script>
+        function closeWindow() {
+            window.open('', '_parent', '');
+            window.close();
+        }
+    </script>
+</head>
+
+<body>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@quasar/extras/material-icons/material-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/quasar/dist/quasar.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar/dist/quasar.umd.min.js"></script>
+
+    <div id="q-app" class="q-pa-md">
+
+        <q-card class="my-card" align="center" v-if="mainvisible">
+            <q-card-section class="bg-primary text-white">
+                <div class="text-h6">Fill Details</div>
+                <div class="text-subtitle2">Jamiat Form</div>
+            </q-card-section>
+            <q-form @submit="onSubmit">
+                <div class="q-ma-md">
+                    <q-input outlined v-model="name" label="Name:" lazy-rules :rules="[ val => val && val.length > 0 || 'Please type something']" />
+                </div>
+                <div class="q-ma-md">
+                    <q-input outlined v-model="email" label="Email:" type="email" />
+                </div>
+                <div class="q-ma-md">
+                    <q-input outlined v-model="mobile" label="Mobile:" type="tel" lazy-rules :rules="[
+                val => val !== null && val !== '' || 'Please enter valid Mobile No.',
+                val => val.length == 10 || 'Please enter a real Mobile No.'
+              ]" />
+                </div>
+                <div class="q-ma-md">
+                    <q-input outlined v-model="city" label="City:" />
+                </div>
+                <div class="q-ma-md">
+                    <q-input outlined v-model="pincode" label="Pin Code:" type="number" />
+                </div>
+                </br>
+                <hr>
+                <div style="width: 100%;" align="center">
+                    Use WhatsApp
+                    <q-toggle v-model="whatsapp" checked-icon="check" color="green" unchecked-icon="clear"></q-toggle>
+
+
+                    <q-btn icon="send" label="Send" type="submit" color="green" class="q-ml-sm" style="width: 150px;" />
+                </div>
+                <br>
+            </q-form>
+        </q-card>
+
+
+        <q-card class="my-card" align="center" v-if="msgvisible">
+            <q-card-section class="bg-grey-8 text-white">
+                <div class="text-h6">Jazakallah</div>
+
+            </q-card-section>
+
+        </q-card>
+
+    </div>
+
+    <script>
+        new Vue({
+            el: '#q-app',
+            data: function() {
+                return {
+                    version: Quasar.version,
+                    name: '',
+                    email: '',
+                    mobile: '',
+                    city: '',
+                    pincode: '',
+                    mainvisible: true,
+                    msgvisible: false,
+                    whatsapp: true,
+                    use_whatsapp: 'Yes',
+                }
+            },
+            methods: {
+                onSubmit() {
+                    if (this.whatsapp == true) {
+                        this.use_whatsapp = "Yes"
+                    } else {
+                        this.use_whatsapp = "No"
+                    }
+                    Quasar.utils.openURL('http://api.whatsapp.com/send?phone=919427976130&text=Name:' +
+                        this.name + ',%0AEmail: ' + this.email + ',%0AMobile: ' + this.mobile + ',%0AWhatsApp: ' + this.use_whatsapp + ',%0ACity: ' + this.city +
+                        ',%0APincode: ' + this.pincode)
+                    this.$q.notify('Form Detail Sent Successfully.')
+                    this.msgvisible = true
+                    this.mainvisible = false
+
+                },
+                notify: function() {
+                    Quasar.utils.openURL('http://api.whatsapp.com/send?phone=919427976130&text=Name:' +
+                        this.name + ',%0AEmail: ' + this.email + ',%0AMobile: ' + this.mobile + ',%0ACity: ' + this.city +
+                        ',%0APincode: ' + this.pincode)
+                    this.$q.notify('Form Detail Sent Successfully.')
+                    this.msgvisible = true
+                    this.mainvisible = false
+                },
+
+                close() {
+                    this.$q.notify('Form Detail Sent Sd xcvdcuccessfully.')
+                    window.open('', '_parent', '');
+                    window.close();
+                },
+
+            }
+        })
+    </script>
+</body>
+
+</html>
